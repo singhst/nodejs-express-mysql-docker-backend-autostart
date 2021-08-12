@@ -1,3 +1,7 @@
+/*
+ * For database operations
+ */
+
 'use strict';
 
 var con = require('./../../config/db');
@@ -5,28 +9,34 @@ var con = require('./../../config/db');
 // Item Object
 
 var Item = function(item){
-  this.item_id = item.item_id;
-  this.item_name = item.item_name;
-  this.item_desc = item.item_desc;
-  this.item_price = item.item_price;
+  this.plan_id = item.plan_id;
+  this.plan_name = item.plan_name;
+  this.general = item.general;
+  this.specialist = item.specialist;
+  this.physiotherapy = item.physiotherapy;
+  this.SYMPTOM_n = item.SYMPTOM_n;
+  this.plan_desc = item.plan_desc;
+  this.plan_month_price = item.plan_month_price;
 };
 
 // Define CRUD Operations Functions
 
 Item.findById = function (id, result) {
-	let sql = 'SELECT * FROM items WHERE item_id = ?';
+	let sql = 'SELECT * FROM plan_info WHERE plan_id = ?';
 	
+	// query to mysql server with (1) `sql` query statements (2) `id` or `data`
+	// `(err, row, fields)`: what we want to get / what we want the query function returns
 	con.query(sql, id, (err, row, fields) => {
 		console.log("error: ", err);
 		if (err) result(err, null);
 		
-		console.log(row);
+		console.log("> inserted row ID: ", row);
 		result(null, row);
 	});
 };
 
 Item.findByName = function (name, result) {
-	let sql = 'SELECT * FROM items WHERE item_name = ?';
+	let sql = 'SELECT * FROM plan_info WHERE plan_name = ?';
 	
 	con.query(sql, name, (err, rows, fields) => {
 		console.log("error: ", err);
@@ -38,7 +48,7 @@ Item.findByName = function (name, result) {
 };
 
 Item.findAll = function (result) {
-	let sql = 'SELECT * FROM items';
+	let sql = 'SELECT * FROM plan_info';
 	
 	con.query(sql, (err, rows, fields) => {
 		console.log("error: ", err);
@@ -50,41 +60,41 @@ Item.findAll = function (result) {
 };
 
 Item.create = function (newItem, result) {	
-	let data = [newItem.item_name, newItem.item_desc, newItem.item_price];
+	let data = [newItem.plan_name, newItem.general, newItem.specialist, newItem.physiotherapy, newItem.SYMPTOM_n, newItem.plan_desc, newItem.plan_month_price];
 	
-	let sql = 'INSERT INTO items(item_name, item_desc, item_price) VALUES(?, ?, ?)';
+	let sql = 'INSERT INTO plan_info(plan_name, general, specialist, physiotherapy, SYMPTOM_n, plan_desc, plan_month_price) VALUES(?, ?, ?, ?, ?, ?, ?)';
 	
 	con.query(sql, data, (err, row, fields) => {
-		console.log("error: ", err);
+		console.log("model/create> error: ", err);
 		if (err) result(err, null);
 		
-		console.log(row.insertId);
+		console.log("model/create> inserted row ID: ", row.insertId);
 		result(null, row.insertId);
 	});
 };
 
 Item.update = function(item, result){
-	let data = [item.item_name, item.item_desc, item.item_price, item.item_id];
+	let data = [item.plan_name, item.plan_desc, item.plan_month_price, item.plan_id];
 	
-	let sql = 'UPDATE items SET item_name = ?, item_desc = ?, item_price = ? WHERE item_id = ?';
+	let sql = 'UPDATE plan_info SET plan_name = ?, plan_desc = ?, plan_month_price = ? WHERE plan_id = ?';
 	
 	con.query(sql, data, (err, row, fields) => {
-		console.log("error: ", err);
+		console.log("model/update> error: ", err);
 		if (err) result(err, null);
 		
-		console.log(row.affectedRows);
+		console.log("model/update> updated row ID: ", row.affectedRows);
 		result(null, row.affectedRows);
 	});
 };
 
 Item.delete = function(id, result){
-	let sql = 'DELETE FROM items WHERE item_id = ?';
+	let sql = 'DELETE FROM plan_info WHERE plan_id = ?';
 	
 	con.query(sql, id, (err, row, fields) => {
-		console.log("error: ", err);
+		console.log("model/delete> error: ", err);
 		if (err) result(err, null);
 		
-		console.log(row.affectedRows);
+		console.log("model/delete> deleted row ID: ", row.affectedRows);
 		result(null, row.affectedRows);
 	});
 };

@@ -1,3 +1,12 @@
+/* 
+ * Handling client request/response
+ * 
+ * ======================================================================
+ * Two parameters of the `callback` function:
+ * `req` is the request body and carries information about the request
+ * `res` is the response body and is used to handle response functions
+ */
+
 'use strict';
 
 const Item = require('../model/item.model');
@@ -46,18 +55,19 @@ exports.findAll = function(req, res) {
 
 exports.create = function(req, res) {
 	const newItem = new Item(req.body);
+	console.log('\n> [POST]');
 	
 	// 400 = bad request
 	if(req.body.constructor === Object && Object.keys(req.body).length === 0){
 		return res.status(400).send('One or more required fields are missing');
-	} if (!newItem.item_name || !newItem.item_desc || !newItem.item_price) {		
-		return res.status(400).send('One or more required fields are missing')
+	} if (!newItem.plan_name || !newItem.plan_desc || !newItem.plan_month_price) {		
+		return res.status(400).send('One or more required fields are missing (2)')
 	} else {		
-		Item.create(newItem, function(err, item_id) {
-			console.log('err: ', err);
-			//if (err === Object) res.status(500).send('Item already exist with name ' + err.item_name);
+		Item.create(newItem, function(err, plan_id) {
+			console.log('controller/create> err: ', err);
+			//if (err === Object) res.status(500).send('Item already exist with name ' + err.plan_name);
 			
-			if (err || item_id <= 0) return res.status(500).send('Error occured during saving item');
+			if (err || plan_id <= 0) return res.status(500).send('Error occured during saving item');
 			
 			return res.sendStatus(200);
 		});
@@ -70,7 +80,7 @@ exports.update = function(req, res) {
 	// 400 = bad request
 	if(req.body.constructor === Object && Object.keys(req.body).length === 0) {
 		return res.status(400).send('One or more required fields are missing');
-	} if (!item.item_id || !item.item_name || !item.item_desc || !item.item_price) {
+	} if (!item.plan_id || !item.plan_name || !item.plan_desc || !item.plan_month_price) {
 		return res.status(400).send('One or more required fields are missing');
 	} else {
 		Item.update(item, function(err, result) {
