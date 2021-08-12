@@ -1,3 +1,7 @@
+/* 
+ * for database configurations
+ */
+
 'use strict';
 
 const mysql = require('mysql');
@@ -5,8 +9,8 @@ const mysql = require('mysql');
 var con = mysql.createConnection({
 	host: 'localhost',
 	user: 'root',
-	password: 'root',
-	database: 'roytuts'
+	password: '00000000',
+	database: 'plan'
 });
 
 con.connect(function(err) {
