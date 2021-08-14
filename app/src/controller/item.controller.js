@@ -13,6 +13,7 @@ const Item = require('../model/item.model');
 
 exports.findById = function(req, res) {
 	const id = req.params.id;
+	console.log('\n> [GET]');
 	
 	if (!id) {
 		// 400 = bad request
@@ -29,6 +30,7 @@ exports.findById = function(req, res) {
 
 exports.findByName = function(req, res) {
 	const name = req.body.name
+	console.log('\n> [POST]');
 	
 	// 400 = bad request
 	if (!name) {
@@ -45,6 +47,8 @@ exports.findByName = function(req, res) {
 };
 
 exports.findAll = function(req, res) {
+	console.log('\n> [GET]');
+
 	Item.findAll(function(err, items) {
 		if (err) return res.status(500).send('Error occured during fetching items');
 		console.log('items: ', items);
@@ -76,6 +80,7 @@ exports.create = function(req, res) {
 
 exports.update = function(req, res) {
 	const item = new Item(req.body);
+	console.log('\n> [PUT]');
 	
 	// 400 = bad request
 	if(req.body.constructor === Object && Object.keys(req.body).length === 0) {
@@ -93,6 +98,7 @@ exports.update = function(req, res) {
 
 exports.delete = function(req, res) {
 	const id = req.params.id;
+	console.log('\n> [DELETE]');
 	
 	if (!id) {
 		// 400 = bad request
