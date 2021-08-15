@@ -60,7 +60,7 @@
     
     <img src="img\docker-compose, request, postman, create 1.png" style="zoom:50%;"/>
 
-    b. Database stored the new plan info. We can see the new plan with `plan_id: 3`.
+    b. Database stored the new plan info. We can see the new plan with `"plan_id": 3`.
 
     <img src="img\docker-compose, request, postman, create 2.png" style="zoom:50%;"/>
     
@@ -91,7 +91,7 @@ Steps:
 
 ## API document
 
-[xxxxx]
+
 
 _______
 ## Note
@@ -128,7 +128,9 @@ _______
 
 3.  Why need an extra shell script while `depends_on` exists in `docker-compose.yaml`?  
 
-    Ans: [from bottom reference link]
+    Ans 1: https://docs.docker.com/compose/startup-order/
+
+    Ans 2: [from bottom reference link]
 
     `depends_on` does not guarantee the execution of services will be kept in order.
     
