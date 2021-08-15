@@ -23,27 +23,30 @@ This project locates exactly under `$HOME` path (i.e. `/home/$USERNAME/`) in Ubu
 <img src="img\project location in ubuntu 20.04.png" style="zoom:50%;"/>
 
 _______
+1.  Move `start.sh` to `$HOME` directory (i.e. `/home/$USERNAME/`).
 
-Command to deal with shell script `.sh`:
-```sh
-$ cd /home/$USERNAME/nodejs-mysql-docker-backend
-# Sets access permissions for .sh
-$ sudo chmod 744 start.sh 
-# Execute the shell script to test
-$ ./start.sh
-    OR
-$ sh start.sh
-```
+    <img src="img\start.sh in HOME path.png" style="zoom:50%;"/>
 
-Deal with `cron`:
-```sh
-# Set crontab
-$ crontab -e
+2.  Command to deal with shell script `.sh`:
+    ```sh
+    $ cd /home/$USERNAME/nodejs-mysql-docker-backend
+    # Sets access permissions for .sh
+    $ sudo chmod 744 start.sh 
+    # Execute the shell script to test
+    $ ./start.sh
+        OR
+    $ sh start.sh
+    ```
 
-# Add a line in crontab (i.e. config file of cron) using the @reboot expression
-## Change the path if the project location is different
-@reboot sh /home/$USERNAME/nodejs-mysql-docker-backend/start.sh
-```
+3.  Deal with `cron`:
+    ```sh
+    # Set crontab
+    $ crontab -e
+
+    # Add a line in crontab (i.e. config file of cron) using the @reboot expression
+    ## Change the path if the project location is different
+    @reboot sh /home/$USERNAME/nodejs-mysql-docker-backend/start.sh
+    ```
 
 Video shows containers are started after reboot.
 

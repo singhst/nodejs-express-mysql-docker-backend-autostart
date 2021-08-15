@@ -1,5 +1,6 @@
 #!/bin/sh
 
 cd ~/nodejs-mysql-docker-backend/
-# docker-compose down÷
+# sleep 15
+# docker-compose down
 docker-compose up -d
