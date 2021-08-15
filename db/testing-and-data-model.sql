@@ -1,4 +1,4 @@
-drop database plan;
+-- drop database plan;
 
 -- The demo data for testing
 
@@ -21,5 +21,4 @@ insert  into `plan_info`(`plan_id`,`plan_name`,`general`,`specialist`,`physiothe
 (1,'standard',1,0,0,0,'this is standard plan description.',0),
 (2,'premium',1,1,1,1,'this is premium plan description',388);
 
-----
-select * from plan_info;
+-- select * from plan_info;
