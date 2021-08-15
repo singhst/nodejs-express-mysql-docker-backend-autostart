@@ -8,7 +8,42 @@
 4. `app/src/model/item.model.js` - dealing with database operations
 5. `app/config/db.js` - for database configurations
 
+`start.sh` - Bash Script to start the project at host startup. Change the path of `cd` if the project location is different. `cron` is used to . 
+([Reference1](https://www.baeldung.com/linux/run-script-on-startup), [Reference2](https://linuxconfig.org/how-to-run-script-on-startup-on-ubuntu-20-04-focal-fossa-server-desktop))
+
 ## Instructions on starting the project
+
+This program is tested under 
+1. `macOS Big Sur` `version 11.4` and 
+2. `Ubuntu 20.04` (in Virtualbox)
+
+_______
+This project locates exactly under `$HOME` path (i.e. `/home/$USERNAME/`) in Ubuntu by default to enable `start after host reboots`.
+
+<img src="img\project location in ubuntu 20.04.png" style="zoom:27%;"/>
+
+_______
+
+Command to deal with shell script `.sh`:
+```sh
+$ cd /home/$USERNAME/nodejs-mysql-docker-backend
+# Sets access permissions for .sh
+$ sudo chmod 744 start.sh 
+# Execute the shell script to test
+$ ./start.sh
+    OR
+$ sh start.sh
+```
+
+Deal with `cron`:
+```sh
+# Set crontab
+$ crontab -e
+
+# Add a line in crontab (i.e. config file of cron) using the @reboot expression
+## Format
+@reboot sh /home/$USERNAME/nodejs-mysql-docker-backend/start.sh
+```
 
 ### With docker-compose
 
