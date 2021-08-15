@@ -52,8 +52,6 @@ Video shows containers are started after reboot.
 
 https://youtu.be/8oQAn82D0aU
 
-<iframe width="1264" height="552" src="https://www.youtube.com/embed/8oQAn82D0aU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
 ### With docker-compose
 
 1.  In the terminal, go to the porject directory containing `docker-compose.yaml`, and input 
