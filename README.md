@@ -1,6 +1,81 @@
 # nodejs-mysql-docker-backend
 
+## File usage
+0. `db/testing-and-data-model.sql` - describe the data model in MySQL database
+1. `app/app.js` - creating server and server configuration
+2. `app/src/route/item.route.js` - handling routes
+3. `app/src/controller/item.controller.js` - handling client request/response
+4. `app/src/model/item.model.js` - dealing with database operations
+5. `app/config/db.js` - for database configurations
+
 ## Instructions on starting the project
+
+### With docker-compose
+
+1.  In the terminal, go to the porject directory containing `docker-compose.yaml`, and input 
+    ```sh
+    $ cd nodejs-mysql-docker-backend/
+    $ docker-compose up --build
+        OR
+    # Run in detached mode
+    $ docker-compose up --build -d
+    ```
+
+    <img src="img\docker-compose up, success 1.png" style="zoom:50%;"/>
+
+    Output of the successful execution:
+    
+    <img src="img\docker-compose up, success 2.png" style="zoom:45%;"/>
+
+2.  Send HTTP request with Postman to containerized API server to retrieve all plan info,
+
+        Method: GET
+        URL:    http://localhost:4000/item
+
+    a. Output from Postman,
+
+    <img src="img\docker-compose, request, postman, get all plans.png" style="zoom:25%;"/>
+
+    b. Output from API server,
+
+    <img src="img\docker-compose, request, server, get all plans.png" style="zoom:50%;"/>
+
+3.  Create a new plan,
+
+        Method: POST
+        URL:    http://localhost:4000/item
+        Body:   [JSON]
+                {
+                    "plan_id" : 22,
+                    "plan_name" : "test",
+                    "general" : 0,
+                    "specialist" : 0,
+                    "physiotherapy" : 0,
+                    "SYMPTOM_n" : 1,
+                    "plan_desc" : "abd",
+                    "plan_month_price" : 9999
+                }
+    
+    a. Output after created,
+    
+    <img src="img\docker-compose, request, postman, create 1.png" style="zoom:50%;"/>
+
+    b. Database stored the new plan info. We can see the new plan with `plan_id: 3`.
+
+    <img src="img\docker-compose, request, postman, create 2.png" style="zoom:50%;"/>
+    
+4.  Video
+    _______
+    `Get All Plans` API demo,
+
+    https://user-images.githubusercontent.com/71545537/129474116-aa757cb9-c6bc-4301-acc8-9a0360a72377.mp4
+
+    `Create new plan` API demo,
+
+    https://user-images.githubusercontent.com/71545537/129475524-af9a2e0a-afe8-446f-97b3-266818ca4d3d.mp4
+    _______
+
+### WITHOUT docker-compose
 Steps:
 
 1. Start the API server,
@@ -13,27 +88,21 @@ Steps:
     
         Method:  GET
         URL:     http://localhost:4000/item
-    
-    [image]
-
-## To test this program
-
-[xxxxxx]
-
-## File usage
-1. `app.js` - creating server and server configuration
-2. `item.route.js` - handling routes
-3. `item.controller.js` - handling client request/response
-4. `item.model.js` - dealing with database operations
-5. `db.js` - for database configurations
 
 ## API document
 
 [xxxxx]
 
+_______
 ## Note
 
-1.  Why use `POST` HTTP request to do Read operation?
+1.  Why use `POST` HTTP request to do the below code Read operation?
+
+    Code in `item.route.js`:
+    ```js
+    // Retrieve a single item with id
+    router.post('/name', controller.findByName);
+    ```
 
     Ans: `GET` HTTP method is suggested NOT TO handle entity-body (i.e. JSON body) in a request. So, we use `POST` request instead.
 
@@ -41,11 +110,6 @@ Steps:
     1. https://stackoverflow.com/questions/978061/http-get-with-request-body
     2. https://datatracker.ietf.org/doc/html/rfc2616#page-53
 
-    Code in `item.route.js`:
-    ```js
-    // Retrieve a single item with id
-    router.post('/name', controller.findByName);
-    ```
 2.  Data structure in `item.model.js`:
     ```js
     // Item Object
@@ -64,11 +128,12 @@ Steps:
 
 3.  Why need an extra shell script while `depends_on` exists in `docker-compose.yaml`?  
 
-    Ans: 
+    Ans: [from bottom reference link]
 
     `depends_on` does not guarantee the execution of services will be kept in order.
     
     So it needs to use shell script (i.e. `wait.sh`) to control the execution of the services.
+
     ```yaml
     version: "3"
 
@@ -83,14 +148,50 @@ Steps:
         - db
         ports:
         - "4000:4000" # map host port 4000 to container port 4000
-        # entrypoint: ["./wait.sh"] # In case "depends_on" not work, use this shell script to control the service execution order
+        entrypoint: ["/wait.sh"] # In case "depends_on" not work, use this shell script to control the service execution order
                                 # "entrypoint" keyword: to execute the shell script file, i.e., wait.sh.
     
     ...
     ```
 
+4.  Why `db` is ok to be the hostname (i.e. maps to IP address) to find the MySQL server in docker network?
+    
+    Ans: 
+     
+    `By default Compose sets up a single network for your app. Each container for a service joins the default network and is both reachable by other containers on that network, and discoverable by them at a hostname identical to the container name.`
+    By https://docs.docker.com/compose/networking/
 
-=======================================
+    _______
+    When you run docker-compose up, the following happens:
+
+    1. A network called `nodejs-mysql-docker-backend_default` is created.
+    2. A container is created using `db`’s configuration. It joins the network `nodejs-mysql-docker-backend_default` under the name `db`.
+    3. A container is created using `rest-app`’s configuration. It joins the network `nodejs-mysql-docker-backend_default` under the name `rest-app`.
+    _______
+
+    Docker has a default DNS server, it takes the service/container name in "docker-compose.yaml" as the hostname (which can be mapped to container's IP address).
+
+    ``` js
+    'use strict';
+
+    const mysql = require('mysql');
+
+    var con = mysql.createConnection({
+        //Why `db` can be ok to be the IP address to find the MySQL server?
+        //Ans: 
+        //=> Each container for a service joins the default network and is both reachable by other containers on that network, and discoverable by them at a hostname identical to the container name.
+        //=> docker has a default DNS server, it takes the service/container name in "docker-compose.yaml" as the hostname (which can be mapped to container's IP address).
+        //ref: https://docs.docker.com/compose/networking/ 
+        // host: 'localhost',
+        host: 'db',	
+        user: 'root',
+        password: '00000000',
+        database: 'plan',
+        // port: 3300
+    });
+
+    ...
+    ```
 
 ##### Design steps
 
@@ -98,7 +199,6 @@ Steps:
 2. Desgin the API routing in `item.route.js` 
 3. Design functions in `item.model.js` to interact with MySQL database
 4. Design `
-
 
 ##### Reference
 
