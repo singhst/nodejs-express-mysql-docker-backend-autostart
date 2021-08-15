@@ -8,7 +8,7 @@
 4. `app/src/model/item.model.js` - dealing with database operations
 5. `app/config/db.js` - for database configurations
 
-`start.sh` - Bash Script to start the project at host startup. Change the path of `cd` if the project location is different. `cron` is used to . 
+`start.sh` - Bash Script to start the project at host startup. `cron` is used to enable `start after reboot`. Change the path of `cd` if the project location is different.
 ([Reference1](https://www.baeldung.com/linux/run-script-on-startup), [Reference2](https://linuxconfig.org/how-to-run-script-on-startup-on-ubuntu-20-04-focal-fossa-server-desktop))
 
 ## Instructions on starting the project
@@ -41,9 +41,14 @@ Deal with `cron`:
 $ crontab -e
 
 # Add a line in crontab (i.e. config file of cron) using the @reboot expression
-## Format
+## Change the path if the project location is different
 @reboot sh /home/$USERNAME/nodejs-mysql-docker-backend/start.sh
 ```
+
+Video shows containers are started after reboot.
+
+[video_xxxxajkdhsakjhdakshdashjdkahjk]
+
 
 ### With docker-compose
 
@@ -124,7 +129,8 @@ Steps:
         Method:  GET
         URL:     http://localhost:4000/item
 
-## API document
+
+## API 
 
 
 
@@ -230,12 +236,14 @@ _______
     ...
     ```
 
+
 ##### Design steps
 
 1. Design data model in MySQL ==> `testing-and-data-model.sql`
 2. Desgin the API routing in `item.route.js` 
 3. Design functions in `item.model.js` to interact with MySQL database
 4. Design `
+
 
 ##### Reference
 
