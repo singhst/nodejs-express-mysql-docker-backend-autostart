@@ -8,7 +8,7 @@
 4. `app/src/model/item.model.js` - dealing with database operations
 5. `app/config/db.js` - for database configurations
 
-`start.sh` - Bash Script to start the project at host startup. `cron` is used to enable `start after reboot`. Change the path of `cd` if the project location is different.
+`start.sh` - Bash Script to start the project at host startup. `cron` is used to enable `start after reboot`.
 ([Reference1](https://www.baeldung.com/linux/run-script-on-startup), [Reference2](https://linuxconfig.org/how-to-run-script-on-startup-on-ubuntu-20-04-focal-fossa-server-desktop))
 
 ## Instructions on starting the project
@@ -24,6 +24,8 @@ This project locates exactly under `$HOME` path (i.e. `/home/$USERNAME/`) in Ubu
 
 _______
 1.  Move `start.sh` to `$HOME` directory (i.e. `/home/$USERNAME/`).
+
+    Change the path of `cd` in `start.sh` if the project location is different.
 
     <img src="img\start.sh in HOME path.png" style="zoom:50%;"/>
 
