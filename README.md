@@ -20,7 +20,7 @@ This program is tested under
 _______
 This project locates exactly under `$HOME` path (i.e. `/home/$USERNAME/`) in Ubuntu by default to enable `start after host reboots`.
 
-<img src="img\project location in ubuntu 20.04.png" style="zoom:10%;"/>
+<img src="img\project location in ubuntu 20.04.png" style="zoom:50%;"/>
 
 _______
 
