@@ -12,12 +12,12 @@ services:
     ports:
       - "4000:4000" # map host port 4000 to container port 4000
     entrypoint: ["/wait.sh"] # In case "depends_on" not work, use this shell script to control the service execution order
-                              # "entrypoint" keyword: to execute the shell script file, i.e., wait.sh.
+                              # "entrypoint" keyword: to execute the shell script file, i.e. wait.sh.
 
   db:
     image: mysql:8.0.25
     command: --default-authentication-plugin=mysql_native_password
-    restart: always #on-failure # Ensure mysql container can be restarted after reboot
+    restart: always #on-failure # Ensure mysql container can be restarted after reboot # (1) https://docs.docker.com/config/containers/start-containers-automatically/#use-a-restart-policy (2) https://docs.docker.com/compose/compose-file/compose-file-v3/#restart
     ports:
       - "33000:3306"
     environment:

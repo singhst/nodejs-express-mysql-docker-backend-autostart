@@ -23,7 +23,44 @@ This project locates exactly under `$HOME` path (i.e. `/home/$USERNAME/`) in Ubu
 <img src="img\project location in ubuntu 20.04.png" style="zoom:50%;"/>
 
 _______
-1.  Move `start.sh` to `$HOME` directory (i.e. `/home/$USERNAME/`).
+
+To enable `docker starts on boot`
+
+1.  Most Linux distributions (RHEL, CentOS, Fedora, Debian, Ubuntu 16.04 and higher) use `systemd` to manage which services start when the system boots.
+
+    `On Debian and Ubuntu, the Docker service is configured to start on boot by default.` - By [docker docs](https://docs.docker.com/engine/install/linux-postinstall/#configure-docker-to-start-on-boot)
+
+    a.  To ensure `docker.service` and To list all enabled services from `systemctl`:
+    
+    ==> https://askubuntu.com/questions/795226/how-to-list-all-enabled-services-from-systemctl
+    
+    ```sh
+    # See the one currently running, you need 
+    $ systemctl | grep running
+    
+    # To list all enabled services from `systemctl`
+    $ systemctl list-unit-files | grep enabled
+    proc-sys-fs-binfmt_misc.automount          static          enabled      
+    -.mount                                    generated       enabled      
+    boot-efi.mount                             generated       enabled      
+    dev-hugepages.mount                        static          enabled
+    ...
+    docker.service                             disabled        enabled
+    ...
+    containerd.service                         disabled        enabled
+    ...
+    ```
+
+    b.  To automatically start Docker and Containerd on boot, use commands:
+
+    ==> https://docs.docker.com/engine/install/linux-postinstall/#configure-docker-to-start-on-boot
+
+    ```sh
+    $ sudo systemctl enable docker.service
+    $ sudo systemctl enable containerd.service
+    ```
+
+2.  Move `start.sh` to `$HOME` directory (i.e. `/home/$USERNAME/`).
 
     Change the path of `cd` in `start.sh` if the project location is different.
 
@@ -238,6 +275,36 @@ _______
     });
 
     ...
+    ```
+
+5.  To enable auto-start docker containers on boot, please ensure the below 2 items:
+
+    a.  Enable `docker.service` in `systemd`:
+
+    ==> https://docs.docker.com/engine/install/linux-postinstall/#configure-docker-to-start-on-boot
+
+    ```sh
+    $ sudo systemctl enable docker.service
+    $ sudo systemctl enable containerd.service
+    ```
+
+    b.  Configure the restart policy for a container to `restart: always` in `docker-compose.yaml`:
+    
+    ==> (1) https://docs.docker.com/config/containers/start-containers-automatically/#use-a-restart-policy 
+    
+    ==> (2) https://docs.docker.com/compose/compose-file/compose-file-v3/#restart
+
+    ```yaml
+        db:
+            image: mysql:8.0.25
+            command: --default-authentication-plugin=mysql_native_password
+            restart: always #on-failure # Ensure mysql container can be restarted after reboot
+            ports:
+                - "33000:3306"
+            environment:
+                MYSQL_ROOT_PASSWORD: "00000000"
+            volumes:
+                - ./db:/docker-entrypoint-initdb.d/:ro
     ```
 
 
