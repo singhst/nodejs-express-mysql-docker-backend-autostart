@@ -1,3 +1,5 @@
+P.S., future: mongodb/hadoop/spark -> k8s
+
 # nodejs-mysql-docker-backend
 
 ## File usage
