@@ -1,5 +1,5 @@
 P.S., future: 
-- mongodb/hadoop/spark -> k8s
+- mongodb -> k8s
 - swagger for api doc ([link](https://swagger.io/))
 
 # nodejs-mysql-docker-backend
